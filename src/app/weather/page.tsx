@@ -10,6 +10,7 @@ import { getWeather } from "@/lib/actions/getWeather";
 import { ILocationObject, IWeatherData } from "@/lib/types";
 import useLocalStorageState from "use-local-storage-state";
 import { updateLocationArray } from "@/lib/utils";
+import { CaretRightIcon } from "@radix-ui/react-icons";
 
 export default function Home() {
   const { data } = useSession();
@@ -131,10 +132,10 @@ export default function Home() {
                     }}
                     disabled={loading}
                     key={item.timestamp}
-                    className="justify-start px-1 py-0 h-[2rem]  m-0"
+                    className="justify-between px-1 py-0 h-[2rem]  m-0"
                     variant="ghost"
                   >
-                    {item.location}
+                    {item.location} <CaretRightIcon className="size-6" />
                   </Button>
                 ))}
               </div>
