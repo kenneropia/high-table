@@ -131,7 +131,7 @@ export default function Home() {
                     }}
                     disabled={loading}
                     key={item.timestamp}
-                    className="justify-start px-1 py-0 h-[1.5rem]  m-0"
+                    className="justify-start px-1 py-0 h-[2rem]  m-0"
                     variant="ghost"
                   >
                     {item.location}
