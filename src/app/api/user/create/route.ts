@@ -5,9 +5,8 @@ import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { validateEmail } from "@/lib/utils";
-import { getServerSession } from "next-auth/";
 
-export const hashPassword = (string: string) => {
+const hashPassword = (string: string) => {
   return sha256(string).toString();
 };
 // function to create user in our database
