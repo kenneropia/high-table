@@ -41,3 +41,6 @@ export function updateLocationArray(
   console.log(originalArray);
   return originalArray;
 }
+
+export const validateEmail = (str: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);

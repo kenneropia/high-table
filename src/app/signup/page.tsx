@@ -1,9 +1,51 @@
+"use client";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+import { redirect, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
+  const router = useRouter();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+  const { data } = useSession();
+
+  if (data?.user) {
+    return redirect("/weather");
+  }
+  const handleSignup = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    const newUser = {
+      email,
+      password,
+    };
+    const response = await fetch("/api/user/create", {
+      method: "POST",
+      body: JSON.stringify(newUser),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      router.push("/login");
+    } else {
+      setError(data.message);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-6 bg-gray-50 sm:px-6 lg:px-8">
       <header className="flex items-center justify-between px-6 py-4 border-b">
@@ -16,7 +58,7 @@ export default function Home() {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form action="#" className="space-y-6" method="POST">
+          <form onSubmit={handleSignup} className="space-y-6" method="POST">
             <div>
               <Label
                 className="block text-sm font-medium text-gray-700"
@@ -31,7 +73,10 @@ export default function Home() {
                   id="email"
                   name="email"
                   required
-                  type="email"
+                  // type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -50,15 +95,21 @@ export default function Home() {
                   name="password"
                   required
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
                 />
               </div>
             </div>
+
+            {error && <p className="text-red-600 text-sm my-2">{error}</p>}
             <div>
               <Button
-                className="w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className={`disabled:opacity-70 w-full flex justify-center py-2 px-4 border border-gray-200 border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                 type="submit"
+                disabled={loading}
               >
-                Sign up
+                {!loading ? "Sign up" : <Loader2 className="animate-spin" />}
               </Button>
             </div>
           </form>

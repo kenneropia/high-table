@@ -19,8 +19,9 @@ export default function Home() {
   const [weatherData, setWeatherData] = useState<IWeatherData["data"] | null>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
+  const savedLocationsKey = `saved-locations-${data?.user?.email}`;
   const [localStorageLocations, setLocalStorageLocations] =
-    useLocalStorageState<ILocationObject[]>("saved-locations", {
+    useLocalStorageState<ILocationObject[]>(savedLocationsKey, {
       defaultValue: [],
     });
 
@@ -40,7 +41,7 @@ export default function Home() {
     setLoading(false);
   };
 
-  if (!data?.user) redirect("/");
+  if (!data?.user) redirect("/login");
 
   return (
     <div>
