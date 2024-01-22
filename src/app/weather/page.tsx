@@ -41,7 +41,7 @@ export default function Home() {
     setLoading(false);
   };
 
-  if (!data?.user) redirect("/login");
+  if (!data?.user) redirect("/");
 
   return (
     <div>
