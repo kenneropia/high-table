@@ -8,7 +8,6 @@ export const hashPassword = (string: string) => {
   return sha256(string).toString();
 };
 import { db } from "@/lib/db";
-import { AdapterUser } from "next-auth/adapters";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -32,7 +31,7 @@ export const authOptions: NextAuthOptions = {
 
         // Check if user exists
         if (!user) {
-          throw new Error("Wrong cred");
+          throw new Error("Invalid credentials");
         }
 
         // Validate password

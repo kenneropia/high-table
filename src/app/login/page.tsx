@@ -26,13 +26,16 @@ export default function Home() {
     setLoading(true);
     try {
       const result = await signIn("credentials", {
-        redirect: true,
+        callbackUrl: "/weather",
         email,
         password,
       });
 
       if (result?.error) {
         setError(result?.error);
+        setLoading(false);
+      } else {
+        console.log("success");
       }
     } catch (err) {
       console.log("ERROR", err);
